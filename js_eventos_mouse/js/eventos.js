@@ -18,10 +18,9 @@ function cambioFotoNave() {
     document.getElementById('nave_espacial').style = "filter:sepia(100%);-webkit-filter:sepia(100%);";
 }
 
-/*asociacion de eventos de mouse 
+/*asociacion de eventos de mouse */
 
 document.getElementById('astronauta').onclick = cambioFotoAstronauta;
 document.getElementById('extraterrestre').ondblclick = cambioFotoExtraterrestre;
 document.getElementById('planetas').onmouseover = cambioFotoPlanetas;
 document.getElementById('nave_espacial').onmouseout = cambioFotoNave;
-*/
