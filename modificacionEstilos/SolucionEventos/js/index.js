@@ -2,6 +2,7 @@
 /*------------------- Ejercicio Lección 2 ----------------------------------------*/
 
 function cambiarColorBotonesAccion(elemento){
+    console.log(elemento);
   elemento.style.background = "#4d62d0";
   if (elemento.children[0]) {
     elemento.children[0].style.background = "inherit";
@@ -137,6 +138,6 @@ var Eventos = {
     addContenido(event.target);
   }
 
-}
+};
 
 Eventos.init();

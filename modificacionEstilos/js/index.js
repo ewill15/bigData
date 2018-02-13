@@ -135,7 +135,6 @@ var Eventos = {
   eventoAddTexto: function(event){
     addContenido(event.target);
   }
-
-}
+};
 
 Eventos.init();

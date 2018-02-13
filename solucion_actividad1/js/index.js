@@ -14,7 +14,7 @@ document.getElementById('boton-receta1').addEventListener('click', function(){
   console.log("Adicionar el zumo de "+unidadesLimon+" "+ingredientes[4]+" y "+sobresGelatina+" sobre de "+ingredientes[3]+" hidratada en agua tibia");
 
   console.log("Deposita la mezcla en moldes individaules y refrigera");
-})
+});
 
 document.getElementById('boton-receta2').addEventListener('click', function(){
   var ingredientes= ['Ginebra', 'Vermouth Seco', 'Aceituna'];
@@ -27,4 +27,4 @@ document.getElementById('boton-receta2').addEventListener('click', function(){
   console.log("Añadir "+onzasVermouth+" onzas de "+ingredientes[1]);
 
   console.log("Servir en una copa tipo Martini y añadir "+unidadesAceituna+" "+ingredientes[2]);
-})
+});
