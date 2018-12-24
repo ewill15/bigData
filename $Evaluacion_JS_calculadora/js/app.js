@@ -1,388 +1,191 @@
-var Calculadora = {
-    init: function() {
-
-    },
-    reducirTecla: function() {},
-    originalTecla: function() {},
-    sumar: function(op1, op2) {
-        resultado = op1 + op2;
-        return resultado;
-    },
-    restar: function(op1, op2) {
-        resultado = op1 - op2;
-        return resultado;
-    },
-    multiplicar: function(op1, op2) {
-        resultado = op1 * op2;
-        return resultado;
-    },
-    dividir: function(op1, op2) {
-        resultado = op1 / op2;
-        return resultado;
-    }
-}
-
-
-var op1 = 0;
-var op2 = 0;
-var operador = '';
-var operadorAnterior = '';
-var result = 0;
-var temp = 0;
-var flag = false; // para cargar el operador 2
-//pantalla 
-var pantalla = document.getElementById('display');
-//boton de encendido
-var btnON = document.querySelector('.teclado .tecla');
-//boton cambio de signo
-var btnSigno = document.querySelectorAll('.teclado .tecla')[1];
-
-//botones numericas
-var button0 = document.getElementsByClassName('col1')[0].childNodes[7];
-var button1 = document.getElementsByClassName('col1')[0].childNodes[1];
-var button2 = document.getElementsByClassName('col1')[0].childNodes[3];
-var button3 = document.getElementsByClassName('col1')[0].childNodes[5];
-
-var button4 = document.getElementsByClassName('teclado')[0].childNodes[17];
-var button5 = document.getElementsByClassName('teclado')[0].childNodes[19];
-var button6 = document.getElementsByClassName('teclado')[0].childNodes[21];
-var button7 = document.getElementsByClassName('teclado')[0].childNodes[9];
-var button8 = document.getElementsByClassName('teclado')[0].childNodes[11];
-var button9 = document.getElementsByClassName('teclado')[0].childNodes[13];
-
-//botones de operaciones
-var btnSumar = document.getElementsByClassName('col2')[0].childNodes[1];
-var btnRestar = document.getElementsByClassName('teclado')[0].childNodes[23];
-var btnMultiplicar = document.getElementsByClassName('teclado')[0].childNodes[15];
-var btnDividir = document.getElementsByClassName('teclado')[0].childNodes[7];
-
-//boton  decimales
-var btnDecimal = document.getElementsByClassName('col1')[0].childNodes[9];
-//boton igual
-var btnResultado = document.getElementsByClassName('col1')[0].childNodes[11];
-
-function reiniciar() {
-    //pantalla.innerHTML = '';
-    op1 = 0;
-    op2 = 0;
-    operador = '';
-    result = 0;
-    pantalla.innerHTML = 0;
-    flag = false;
-}
-
-function agregarMostrarNumero(numero) {
-    if ((pantalla.innerHTML.indexOf('.') && pantalla.innerHTML.length < 9 && pantalla.innerHTML > 0) || (pantalla.innerHTML == '0.'))
-        pantalla.innerHTML = pantalla.innerHTML + numero;
-    else {
-        if (pantalla.innerHTML == 0)
-            pantalla.innerHTML = numero;
-    }
-}
-
-function cambiarSigno() {
-    var numero = pantalla.innerHTML;
-    //if (numero > 0){
-    numero = numero * -1;
-    op2 = numero;
-    //}
-    pantalla.innerHTML = numero;
-}
-
-function nroDecimal() {
-    var decimal = pantalla.innerHTML;
-    if (decimal.indexOf(".") == -1) {
-        pantalla.innerHTML = pantalla.innerHTML + '.';
-    }
-}
-
-function mostrarResultado(numero) {
-    pantalla.innerHTML = '';
-    cantidad = contarDigitos(numero);
-    if (!esEntero(numero)) {
-        switch (cantidad) {
-            case 2:
-                pantalla.innerHTML = numero.toFixed(7);
-                break;
-            case 3:
-                pantalla.innerHTML = numero.toFixed(6);
-                break;
-            case 4:
-                pantalla.innerHTML = numero.toFixed(5);
-                break;
-            case 5:
-                pantalla.innerHTML = numero.toFixed(4);
-                break;
-            case 6:
-                pantalla.innerHTML = numero.toFixed(3);
-                break;
-            case 7:
-                pantalla.innerHTML = numero.toFixed(2);
-                break;
-            case 8:
-                pantalla.innerHTML = numero.toFixed(1);
-                break;
-            default:
-                pantalla.innerHTML = numero.toFixed(8);
-                break;
-
-        }
-    } else {
-        if (cantidad < 9) {
-            pantalla.innerHTML = numero;
-        }
-    }
-}
-//funciona
-function esEntero(numero) {
-    if (numero - Math.floor(numero) == 0) {
-        //alert ("Es un numero entero");
-        return true;
-    } else {
-        //alert ("Es un numero decimal");
-        return false;
-    }
-}
-//funciona   
-contador = 0;
-function contarDigitos(numero) {    
-    if (esEntero(numero)) {
-        if (numero < 0)
-            numero *= -1
-        while (numero > 0) {
-            numero = parseInt(numero / 10);
-            contarDigitos(numero);
-            contador++;
-        }
-        
-    } else {
-    	//contar parte entera
-    	contador = contarDigitos(parseInt(numero));
-        //convertir numero a cadena
-        strDecimal = (numero).toString();
-        //agregar contador para el separador decimal si es positivo o negativo
-        if (numero < 0)
-            contador += 2
-        else
-            contador++
-
-        strDecimal.substring(contador) //extraccion de parte decimal
-        numero = Number(strDecimal) //conversion de cadena a numero de la parte decimal
-        if (numero < 0)
-            numero *= -1
-        while (numero > 0) {
-            numero = parseInt(numero / 10);
-            contador++;
-        }     
-    }
-    return contador;    
-}
-//funciona
-function verificarOperacion(op1, op2, operacion) {
-    if (op2 == 0 && flag == true) {
-        flag = true;
-    } else {
-        /*console.log(op2 == 0 && flag == true)
-        op2 = op2;*/
-        op1 = realizarOperacion(operacion, op1, op2);
-    }
-    operador = operacion;
-    return op1;
-}
-//funciona
-function realizarOperacion(operador, op1, op2) {
-    switch (operador) {
-        case 'sumar':
-            result = Calculadora.sumar(op1, op2);
-            break;
-        case 'restar':
-            result = Calculadora.restar(op1, op2);
-            break;
-        case 'multiplicar':
-            result = Calculadora.multiplicar(op1, op2);
-            break;
-        case 'dividir':
-            result = Calculadora.dividir(op1, op2);
-            break;
-    }
-    return result;
-}
-btnON.addEventListener('click', function() {
-
-    reiniciar();
-});
-btnSigno.addEventListener('click', function() {
-    cambiarSigno();
-});
-btnDecimal.addEventListener('click', function() {
-
-    nroDecimal();
-});
-
-btnSumar.addEventListener("click", function() {
-	if (flag)
-    	op1=verificarOperacion(op1, op2, operadorAnterior);
-	else{
-			operador = 'sumar';
-			op1=verificarOperacion(op1, op2, 'sumar');
+var calculadora = {
+	
+	pantalla: document.getElementById("display"),
+	valorPantalla: "0",
+	operacion: "",
+	primerValor: 0,
+	segundoValor: 0,
+	ultimoValor: 0,
+	resultado: 0,
+	auxTeclaIgual: false,
+	
+	init: (function(){
+		this.eventosBotones(".tecla");
+		this.eventosaFuncion();
+	}),
+	
+	//Eventos de formato de botones	
+	eventosBotones: function(selector){
+		var btn = document.querySelectorAll(selector);
+		for (var i = 0; i<btn.length;i++) {
+			btn[i].onmouseover = this.eventoDisminuirBoton;
+			btn[i].onmouseleave = this.eventoNormalBoton;
+		};
+	},
+//asignar evento para disminuir tamano de boton
+	eventoDisminuirBoton: function(event){
+		calculadora.disminuirBoton(event.target);
+	},
+//asignar evento para boton  de tamano normal
+	eventoNormalBoton: function(event){
+		calculadora.aumentaBoton(event.target);
+	},
+	
+	//Formato de botones 	
+	disminuirBoton: function(elemento){
+		var btn = elemento.id;
+		if (btn == "1" || btn == "2" || btn == "3" || btn == "0" || btn == "igual" || btn == "punto" ) {
+			elemento.style.width = "28%";
+			elemento.style.height = "62px";
+		} else if(btn == "mas") {
+			elemento.style.width = "88%";
+			elemento.style.height = "98%";
+		} else {
+		elemento.style.width = "21%";
+		elemento.style.height = "62px";
 		}
-    flag = true;
-    console.log('al presionar sumar flag=' + flag);
-    pantalla.innerHTML = ' ';
-    operadorAnterior = 'sumar';
-});
-btnRestar.addEventListener("click", function() {
-    if (flag)
-    	op1=verificarOperacion(op1, op2, operadorAnterior);
-	else{
-		operador = 'restar';
-		op1=verificarOperacion(op1, op2, operador);
+	},
+	
+	aumentaBoton: function(elemento){
+		var btn = elemento.id;
+		if (btn == "1" || btn == "2" || btn == "3" || btn == "0" || btn == "igual" || btn == "punto" ) {
+			elemento.style.width = "29%";
+			elemento.style.height = "62.91px";
+		} else if(btn == "mas") {
+			elemento.style.width = "90%";
+			elemento.style.height = "100%";
+		} else {
+		elemento.style.width = "22%";
+		elemento.style.height = "62.91px";
+		}
+	},
+	
+	borrarPantalla: function(){ 
+	    this.valorPantalla = "0";
+		this.operacion = "";
+		this.primerValor = 0;
+		this.segundoValor = 0;
+		this.resultado = 0;
+		this.Operación = "";
+		this.auxTeclaIgual = false;
+		this.ultimoValor = 0;
+		this.actualizarPantalla();
+	},
+	
+	cambiarSigno: function(){
+		if (this.valorPantalla != "0") {
+			var aux;
+			if (this.valorPantalla.charAt(0) == "-") {
+				aux = this.valorPantalla.slice(1);
+			}	else {
+				aux = "-" + this.valorPantalla;
+			}
+		this.valorPantalla = "";
+		this.valorPantalla = aux;
+		this.actualizarPantalla();
+		}
+	},
+	
+	ingresarDecimal: function(){
+		if (this.valorPantalla.indexOf(".") == -1) {
+			if (this.valorPantalla == ""){
+				this.valorPantalla = this.valorPantalla + "0.";
+			} else {
+				this.valorPantalla = this.valorPantalla + ".";
+			}
+			this.actualizarPantalla();
+		}
+	},
+	
+	ingresarNumero: function(valor){
+		if (this.valorPantalla.length < 8) {
+		
+			if (this.valorPantalla == "0") {
+				this.valorPantalla = "";
+				this.valorPantalla = this.valorPantalla + valor;
+			} else {
+				this.valorPantalla = this.valorPantalla + valor;
+			}
+		this.actualizarPantalla();
+		}
+	},
+	
+	ingresarOperacion: function(oper){
+		this.primerValor = parseFloat(this.valorPantalla);
+		this.valorPantalla = "";
+		this.operacion = oper;
+		this.auxTeclaIgual = false;
+		this.actualizarPantalla();
+	},
+	
+	verResultado: function(){
+
+		if(!this.auxTeclaIgual){ 
+			this.segundoValor = parseFloat(this.valorPantalla);
+			this.ultimoValor = this.segundoValor;
+			this.realizarOperacion(this.primerValor, this.segundoValor, this.operacion);
+		
+		} else {
+			this.realizarOperacion(this.primerValor, this.ultimoValor, this.operacion);
+		}
+	
+		this.primerValor = this.resultado;
+		this.valorPantalla = "";
+	
+		if (this.resultado.toString().length < 9){
+			this.valorPantalla = this.resultado.toString();
+		} else {
+			this.valorPantalla = this.resultado.toString().slice(0,8) + "...";
+		}
+	
+		this.auxTeclaIgual = true;		
+		this.actualizarPantalla();
+	
+	},
+	
+	realizarOperacion: function(primerValor, segundoValor, operacion){
+		switch(operacion){
+			case "+": 
+				this.resultado = eval(primerValor + segundoValor);
+			break;
+			case "-": 
+				this.resultado = eval(primerValor - segundoValor);
+			break;
+			case "*": 
+				this.resultado = eval(primerValor * segundoValor);
+			break;
+			case "/": 
+				this.resultado = eval(primerValor / segundoValor);
+			break;
+		}
+	},
+	
+	actualizarPantalla: function(){
+		this.pantalla.innerHTML = this.valorPantalla;
+	},
+
+	eventosaFuncion: function(){
+		document.getElementById("0").addEventListener("click", function() {calculadora.ingresarNumero("0");});
+		document.getElementById("1").addEventListener("click", function() {calculadora.ingresarNumero("1");});
+		document.getElementById("2").addEventListener("click", function() {calculadora.ingresarNumero("2");});
+		document.getElementById("3").addEventListener("click", function() {calculadora.ingresarNumero("3");});
+		document.getElementById("4").addEventListener("click", function() {calculadora.ingresarNumero("4");});
+		document.getElementById("5").addEventListener("click", function() {calculadora.ingresarNumero("5");});
+		document.getElementById("6").addEventListener("click", function() {calculadora.ingresarNumero("6");});
+		document.getElementById("7").addEventListener("click", function() {calculadora.ingresarNumero("7");});
+		document.getElementById("8").addEventListener("click", function() {calculadora.ingresarNumero("8");});
+		document.getElementById("9").addEventListener("click", function() {calculadora.ingresarNumero("9");});
+		document.getElementById("on").addEventListener("click", function() {calculadora.borrarPantalla();});
+		document.getElementById("sign").addEventListener("click", function() {calculadora.cambiarSigno();});
+		document.getElementById("punto").addEventListener("click", function() {calculadora.ingresarDecimal();});
+		document.getElementById("igual").addEventListener("click", function() {calculadora.verResultado();});
+		document.getElementById("raiz").addEventListener("click", function() {calculadora.ingresarOperacion("raiz");});
+		document.getElementById("dividido").addEventListener("click", function() {calculadora.ingresarOperacion("/");});
+		document.getElementById("por").addEventListener("click", function() {calculadora.ingresarOperacion("*");});
+		document.getElementById("menos").addEventListener("click", function() {calculadora.ingresarOperacion("-");});
+		document.getElementById("mas").addEventListener("click", function() {calculadora.ingresarOperacion("+");});
 	}
-    flag = true;
-    pantalla.innerHTML = ' ';
-    operadorAnterior = 'restar';
-});
-btnMultiplicar.addEventListener("click", function() {
-    if (flag)
-    	op1=verificarOperacion(op1, op2, operadorAnterior);
-	else{
-			operador = 'multiplicar';
-			op1=verificarOperacion(op1, op2, 'multiplicar');
-console.log('A: '+op1+' B: '+op2+'SIGNO: '+operador);
-		}
-    flag = true;
-    pantalla.innerHTML = ' ';
-    operadorAnterior = 'multiplicar';
-});
-btnDividir.addEventListener("click", function() {
-    if (flag)
-    	op1=verificarOperacion(op1, op2, operadorAnterior);
-	else{
-			operador = 'dividir';
-			op1=verificarOperacion(op1, op2, 'dividir');
-		}
-    flag = true;
-    pantalla.innerHTML = ' ';
-    operadorAnterior = 'dividir';
-});
+	
+};
 
-btnResultado.addEventListener('click', function() {
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
-    //op2 = pantalla.innerHTML;    
-    resultado = realizarOperacion(operador, parseFloat(op1), parseFloat(op2));
-    console.log(operador + ' A: ' + op1 + ' == B:' + op2 + ' resultado ' + resultado);
-    mostrarResultado(resultado);
-    temp=op2
-    op1=resultado
-    op2=temp
-
-});
-
-button0.addEventListener('click', function() {
-    agregarMostrarNumero(this.alt);
-    if (contarDigitos(pantalla.innerHTML.length) < 9) {
-        if (flag) {
-            op2 = parseFloat(pantalla.innerHTML);
-        } else {
-            op1 = parseFloat(pantalla.innerHTML);
-        }
-    }
-});
-button1.addEventListener('click', function() {
-    agregarMostrarNumero(this.alt);
-    if (contarDigitos(pantalla.innerHTML.length) < 9) {
-        if (flag) {
-            op2 = parseFloat(pantalla.innerHTML);
-        } else {
-            op1 = parseFloat(pantalla.innerHTML);
-        }
-    }
-});
-button2.addEventListener('click', function() {
-    agregarMostrarNumero(this.alt);
-    if (pantalla.innerHTML.length < 9) {
-        if (flag) {
-            op2 = parseFloat(pantalla.innerHTML);
-        } else {
-            op1 = parseFloat(pantalla.innerHTML);
-        }
-    }
-    console.log('al presionar 2 valor de op1=' + op1 + ' operador::'+operador);
-});
-button3.addEventListener('click', function() {
-    agregarMostrarNumero(this.alt);
-    if (pantalla.innerHTML.length < 9) {
-        if (flag) {
-            op2 = parseFloat(pantalla.innerHTML);
-        } else {
-            op1 = parseFloat(pantalla.innerHTML);
-        }
-    }
-    console.log('al presionar 3 valor de op2=' + op2 + ' operador::'+operador);
-});
-button4.addEventListener('click', function() {
-    agregarMostrarNumero(this.alt);
-    if (pantalla.innerHTML.length < 9) {
-        if (flag) {
-            op2 = parseFloat(pantalla.innerHTML);
-        } else {
-            op1 = parseFloat(pantalla.innerHTML);
-        }
-    }
-    console.log('al presionar 4 valor de A=' + op1 +' B='+op2 + ' operador::'+operador);
-});
-button5.addEventListener('click', function() {
-    agregarMostrarNumero(this.alt);
-    if (pantalla.innerHTML.length < 9) {
-        if (flag) {
-            op2 = parseFloat(pantalla.innerHTML);
-        } else {
-            op1 = parseFloat(pantalla.innerHTML);
-        }
-    }
-    console.log('al presionar 5 valor de A=' + op1 +' B='+op2 + ' operador::'+operador);
-});
-button6.addEventListener('click', function() {
-    agregarMostrarNumero(this.alt);
-    if (pantalla.innerHTML.length < 9) {
-        if (flag) {
-            op2 = parseFloat(pantalla.innerHTML);
-        } else {
-            op1 = parseFloat(pantalla.innerHTML);
-        }
-    }
-    console.log('al presionar 6 valor de A=' + op1 +' B='+op2 + ' operador::'+operador);
-});
-button7.addEventListener('click', function() {
-    agregarMostrarNumero(this.alt);
-    if (pantalla.innerHTML.length < 9) {
-        if (flag) {
-            op2 = parseFloat(pantalla.innerHTML);
-        } else {
-            op1 = parseFloat(pantalla.innerHTML);
-        }
-    }
-    console.log('al presionar 7 valor de A=' + op1 +' B='+op2 + ' operador::'+operador);
-});
-button8.addEventListener('click', function() {
-    agregarMostrarNumero(this.alt);
-    if (pantalla.innerHTML.length < 9) {
-        if (flag) {
-            op2 = parseFloat(pantalla.innerHTML);
-        } else {
-            op1 = parseFloat(pantalla.innerHTML);
-        }
-    }
-    console.log('al presionar 8 valor de A=' + op1 +' B='+op2 + ' operador::'+operador);
-});
-button9.addEventListener('click', function() {
-    agregarMostrarNumero(this.alt);
-    if (pantalla.innerHTML.length < 9) {
-        if (flag) {
-            op2 = parseFloat(pantalla.innerHTML);
-        } else {
-            op1 = parseFloat(pantalla.innerHTML);
-        }
-    }
-    console.log('al presionar 9 valor de A=' + op1 +' B='+op2 + ' operador::'+operador);
-});
+calculadora.init();
